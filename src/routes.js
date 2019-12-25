@@ -3,6 +3,7 @@ import multer from 'multer';
 import Brute from 'express-brute';
 import BruteRedis from 'express-brute-redis';
 
+import redis from 'redis';
 import multerConfig from './config/multer';
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
@@ -23,7 +24,9 @@ import redisConfig from './config/redis';
 const routes = new Router();
 const upload = multer(multerConfig);
 
-const bruteStore = new BruteRedis(redisConfig);
+const bruteStore = new BruteRedis({
+  client: redis.createClient(redisConfig),
+});
 
 const bruteForce = new Brute(bruteStore);
 

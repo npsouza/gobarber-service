@@ -4,10 +4,16 @@ import redisConfig from '../config/redis';
 
 class Cache {
   constructor() {
-    this.redis = new Redis({
-      ...redisConfig,
-      keyPrefix: 'cache:',
-    });
+    if (redisConfig.host) {
+      this.redis = new Redis({
+        ...redisConfig,
+        keyPrefix: 'cache:',
+      });
+    } else {
+      this.redis = new Redis(redisConfig.url, {
+        keyPrefix: 'cache:',
+      });
+    }
   }
 
   set(key, value) {
